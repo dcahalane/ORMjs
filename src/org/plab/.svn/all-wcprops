@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/web/!svn/ver/75/ORMjs/src/org/plab
+END
+Relationship.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/web/!svn/ver/24/ORMjs/src/org/plab/Relationship.java
+END
+DataMapParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/web/!svn/ver/24/ORMjs/src/org/plab/DataMapParser.java
+END
+Converter.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/web/!svn/ver/102/ORMjs/src/org/plab/Converter.java
+END
+ConnectionManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/web/!svn/ver/102/ORMjs/src/org/plab/ConnectionManager.java
+END
+TableField.java
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/web/!svn/ver/24/ORMjs/src/org/plab/TableField.java
+END
+TableObject.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/web/!svn/ver/24/ORMjs/src/org/plab/TableObject.java
+END

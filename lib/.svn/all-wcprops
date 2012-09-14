@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/web/!svn/ver/24/ORMjs/lib
+END
+classes12.jar
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/web/!svn/ver/24/ORMjs/lib/classes12.jar
+END
+gson-1.6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/web/!svn/ver/24/ORMjs/lib/gson-1.6.jar
+END
+bonecp-0.7.1.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/web/!svn/ver/24/ORMjs/lib/bonecp-0.7.1.RELEASE.jar
+END
+guava-r09.jar
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/web/!svn/ver/24/ORMjs/lib/guava-r09.jar
+END
+nblibraries.properties
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/web/!svn/ver/24/ORMjs/lib/nblibraries.properties
+END
+slf4j-api-1.6.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/web/!svn/ver/24/ORMjs/lib/slf4j-api-1.6.1.jar
+END

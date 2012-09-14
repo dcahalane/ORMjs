@@ -1,0 +1,136 @@
+package org.plab.servlet;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.plab.ConnectionManager;
+
+import org.plab.Converter;
+
+/**
+ * Servlet implementation class ORM
+ */
+public class ORM extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ORM() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+    
+    public void init() throws ServletException{
+       String DRIVER = getServletContext().getInitParameter("JDBC_DRIVER");
+       if(DRIVER != null){
+           ConnectionManager.JDBC_DRIVER.add(DRIVER);
+       }
+    }
+
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        process(request, response);
+    }
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        process(request, response);
+    }
+
+    
+    /*
+     * ACTION=[CREATE,UPDATE,SEARCH,RETRIEVE], TABLE_NAME=PrimaryTable [,DATA=JSON] [,VAL=PrimaryKeyValueOrSearchValue] [, KEY=SearchKey] [, DATA-MAP=DataMapLocation] [, DB-NAME=SID]
+     */
+    void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //TODO: Handle returning exceptions back to the client.
+        String action = request.getParameter("ACTION");//Mandatory.
+        
+        String dataMap = request.getParameter("DATA-MAP");
+        if(dataMap == null){
+            dataMap = getServletContext().getInitParameter("DATA-MAP");
+        }
+        String connection = request.getParameter("DB-NAME");
+        if(connection == null){
+            connection = getServletContext().getInitParameter("DB-NAME");
+        }
+        
+        Logger.getLogger(ORM.class.getName()).log(Level.INFO, "*****DATA-MAP : " + dataMap);
+        Logger.getLogger(ORM.class.getName()).log(Level.INFO, "*****DB-NAME : " + connection);
+        Logger.getLogger(ORM.class.getName()).log(Level.INFO, "*****JDBC_DRIVER : " + ConnectionManager.JDBC_DRIVER);
+        Converter c = new Converter(dataMap, connection);
+        if ("CREATE".equals(action)) {
+            String tableName = request.getParameter("TABLE-NAME");
+            create(tableName, c, response);
+        } else if ("UPDATE".equals(action)) {//Update will do either Insert or Update 
+            String json = request.getParameter("DATA");           
+            update(json, c, response);
+        } else if ("SEARCH".equals(action)){
+            String tableName = request.getParameter("TABLE-NAME");
+            String key = request.getParameter("KEY");
+            String val = request.getParameter("VAL");
+            if(tableName != null && key != null && val != null){
+                
+            }
+        } else {//Default is to retrieve.
+            String tableName = request.getParameter("TABLE-NAME");
+            String keyValue = request.getParameter("VAL");
+            if (tableName != null && keyValue != null) {
+                try {
+                    retrieve(tableName, keyValue, c, response);
+                } catch (Exception e) {
+                    Logger.getLogger(ORM.class.getName()).log(Level.SEVERE, null, e);
+                }
+            } else if(tableName != null){
+                create(tableName, c, response);
+            }
+        }
+    }
+
+    void create(String tableName, Converter c, HttpServletResponse response) throws IOException {
+        if (tableName != null) {
+            String json = c.create(tableName);
+            response.getWriter().println(json);
+            response.getWriter().flush();
+            response.getWriter().close();
+        }
+    }
+
+    void update(String json, Converter c, HttpServletResponse response) throws IOException {
+        if (json != null) {
+            try {
+                json = c.update(json);
+                response.getWriter().println(json);
+                response.getWriter().flush();
+                response.getWriter().close();
+            } catch (Exception ex) {
+                Logger.getLogger(ORM.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    void retrieve(String tableName, String key, Converter c, HttpServletResponse response) throws IOException, SQLException, ClassNotFoundException {
+        String json = c.retrieve(tableName, key, true);
+        Logger.getLogger(ORM.class.getName()).log(Level.INFO, "RETRIEVED\t" + json);
+        response.getWriter().println(json);
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
+}
